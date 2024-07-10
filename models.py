@@ -3,7 +3,9 @@ from sqlalchemy.orm import (scoped_session, sessionmaker, relationship, backref)
 from sqlalchemy.ext.declarative import declarative_base
 
 engine = create_engine('sqlite:///database.sqlite3', convert_unicode=True)
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+db_session = scoped_session(sessionmaker(autocommit=False, 
+										 autoflush=False, 
+										 bind=engine))
 
 Base = declarative_base()
 Base.query = db_session.query_property()
@@ -19,9 +21,9 @@ class Employee(Base):
 	name = Column(String)
 	hired_on = Column(DateTime, default=func.now())
 	department_id = Column(Integer, ForeignKey('department.id'))
-	deparment = relationship(
+	department = relationship(
 		Department,
 		backref=backref(
 			'employees',
 			uselist=True,
-			cascade='delete_all'))
+			cascade='delete,all'))
